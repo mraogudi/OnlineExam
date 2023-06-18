@@ -1,4 +1,14 @@
 server:
   port:8080
 
-
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/gmrao
+    username: root
+    password: Ved@nsh!ka2022
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
