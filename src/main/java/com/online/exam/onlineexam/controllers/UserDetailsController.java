@@ -2,19 +2,28 @@ package com.online.exam.onlineexam.controllers;
 
 import com.online.exam.onlineexam.model.requests.UserDetailsReq;
 import com.online.exam.onlineexam.model.responses.UserDetailsRes;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
+import com.online.exam.onlineexam.service.OnlineExamService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
-@Validated
 @RequestMapping("/online")
 public class UserDetailsController {
 
+    @Autowired
+    private OnlineExamService examService;
+
     @PostMapping("/user")
-    public ResponseEntity<UserDetailsRes> registerUser(@RequestBody @Validated UserDetailsReq userDetailsReq) {
-        return new ResponseEntity<>(new UserDetailsRes(), HttpStatus.OK);
+    public UserDetailsRes registerUser(@RequestBody UserDetailsReq userDetailsReq) {
+        return new UserDetailsRes();
+    }
+
+    @GetMapping("/user")
+    public List<UserDetailsRes> getUserList() {
+        return examService.getAllUsers();
     }
 
 }

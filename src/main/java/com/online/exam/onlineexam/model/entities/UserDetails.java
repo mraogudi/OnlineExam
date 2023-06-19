@@ -1,6 +1,6 @@
 package com.online.exam.onlineexam.model.entities;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "tbl_user_details", schema = "gmrao")

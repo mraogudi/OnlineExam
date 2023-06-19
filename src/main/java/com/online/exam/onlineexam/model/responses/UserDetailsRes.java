@@ -9,6 +9,7 @@ public class UserDetailsRes {
     private String mobileNo;
     private String email;
     private Integer userId;
+    private Set<Options> optionsSet;
 
     public Integer getUserId() {
         return userId;
@@ -25,8 +26,6 @@ public class UserDetailsRes {
     public void setOptionsSet(Set<Options> optionsSet) {
         this.optionsSet = optionsSet;
     }
-
-    private Set<Options> optionsSet;
 
     public String getName() {
         return name;

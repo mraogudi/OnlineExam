@@ -1,6 +1,6 @@
 package com.online.exam.onlineexam.model.entities;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "tbl_user_answers", schema = "gmrao")
@@ -14,16 +14,6 @@ public class UserAnswers {
     private Integer question_id;
     @Column(name = "option_id")
     private Integer options_id;
-    @Column(name = "user_option_id")
-    private Integer user_options_id;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public Integer getUser_details_id() {
         return user_details_id;
@@ -55,5 +45,26 @@ public class UserAnswers {
 
     public void setUser_options_id(Integer user_options_id) {
         this.user_options_id = user_options_id;
+    }
+
+    @Column(name = "user_option_id")
+    private Integer user_options_id;
+    @Column(name = "status")
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

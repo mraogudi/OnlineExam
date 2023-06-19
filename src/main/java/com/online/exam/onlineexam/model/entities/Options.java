@@ -1,6 +1,6 @@
 package com.online.exam.onlineexam.model.entities;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "tbl_options", schema = "gmrao")
@@ -8,13 +8,10 @@ public class Options {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @Column(name = "option")
+    @Column(name = "option_value")
     private String options;
     @Column(name = "correct")
     private String answer;
-    @ManyToOne
-    @JoinColumn(name = "question_id")
-    private Integer questionId;
 
     public int getId() {
         return id;
