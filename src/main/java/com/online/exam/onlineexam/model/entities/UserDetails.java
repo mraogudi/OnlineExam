@@ -1,6 +1,7 @@
 package com.online.exam.onlineexam.model.entities;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tbl_user_details", schema = "gmrao")
@@ -14,6 +15,16 @@ public class UserDetails {
     private String phoneNo;
     @Column(name = "email_id")
     private String email;
+    @Column(name = "registered_date")
+    private LocalDateTime registeredDate;
+
+    public LocalDateTime getRegisteredDate() {
+        return registeredDate;
+    }
+
+    public void setRegisteredDate(LocalDateTime registeredDate) {
+        this.registeredDate = registeredDate;
+    }
 
     public int getId() {
         return id;
