@@ -5,28 +5,30 @@ import com.online.exam.onlineexam.exceptions.UserNotFoundException;
 import com.online.exam.onlineexam.model.entities.UserDetails;
 import com.online.exam.onlineexam.model.requests.UserDetailsReq;
 import com.online.exam.onlineexam.model.responses.UserDetailsRes;
-import com.online.exam.onlineexam.repository.UserDetailsRepository;
+import com.online.exam.onlineexam.repository.OnlineExamRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 public class OnlineExamService {
-    private final UserDetailsRepository detailsRepository;
+    private final OnlineExamRepository examRepository;
 
-    public OnlineExamService(UserDetailsRepository detailsRepository) {
-        this.detailsRepository = detailsRepository;
+    public OnlineExamService(OnlineExamRepository examRepository) {
+        this.examRepository = examRepository;
     }
 
     public List<UserDetailsRes> getAllUsers() throws UserNotFoundException {
-        List<UserDetails> userDetailsList = StreamSupport
-                .stream(detailsRepository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
+        List<UserDetails> userDetailsList = examRepository.getAllUsers();
         if (userDetailsList.isEmpty()) {
             throw new UserNotFoundException("No users registered till date");
         }
@@ -36,27 +38,45 @@ public class OnlineExamService {
     private UserDetailsRes mapObjectToDetails(UserDetails user) {
         UserDetailsRes detailsRes = new UserDetailsRes();
         detailsRes.setEmail(user.getEmail());
-        detailsRes.setName(user.getName());
+        detailsRes.setFirstName(user.getFirstName());
+        detailsRes.setLastName(user.getLastName());
         detailsRes.setMobileNo(user.getPhoneNo());
+        detailsRes.setUserId(user.getId());
         return detailsRes;
     }
 
     public UserDetailsRes registerUserDetails(UserDetailsReq userDetailsReq) throws UserAlreadyExist {
-        Optional<UserDetails> details = detailsRepository.findByPhoneNo(userDetailsReq.getMobileNo());
-        if(details.isEmpty()) {
+        UserDetails details = examRepository.findByPhoneNo(userDetailsReq);
+        if(details == null) {
             UserDetails userDetails = new UserDetails();
             userDetails.setEmail(userDetailsReq.getEmail());
-            userDetails.setName(userDetailsReq.getName());
+            userDetails.setFirstName(userDetailsReq.getFirstName());
+            userDetails.setLastName(userDetailsReq.getLastName());
             userDetails.setPhoneNo(userDetailsReq.getMobileNo());
-            userDetails.setRegisteredDate(LocalDateTime.now());
-            detailsRepository.save(userDetails);
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                userDetails.setDob(dateFormat.parse(userDetailsReq.getDob()));
+            } catch (ParseException ignored) {
+
+            }
+            if("M".equalsIgnoreCase(userDetailsReq.getGender())) {
+                userDetails.setGender("Male");
+            } else if("F".equalsIgnoreCase(userDetailsReq.getGender())) {
+                userDetails.setGender("Female");
+            } else {
+                userDetails.setGender("Other");
+            }
+            examRepository.registerUserDetails(userDetails);
         } else {
-            LocalDateTime current = LocalDateTime.now();
-            LocalDateTime registeredDate = details.get().getRegisteredDate();
+            LocalDate current = LocalDate.now();
+            String previous = new SimpleDateFormat("yyyy-MM-dd").format(details.getRegisteredDate());
+            String[] dates = previous.split("-");
+            LocalDate registeredDate = LocalDate.of(Integer.parseInt(dates[0]), Integer.parseInt(dates[1]),
+                    Integer.parseInt(dates[2]));
             long days = ChronoUnit.DAYS.between(registeredDate, current);
             if (days > 30) {
-                details.get().setRegisteredDate(LocalDateTime.now());
-                detailsRepository.save(details.get());
+                details.setRegisteredDate(new Date());
+                examRepository.registerUserDetails(details);
             } else {
                 throw new UserAlreadyExist("User Already exist");
             }

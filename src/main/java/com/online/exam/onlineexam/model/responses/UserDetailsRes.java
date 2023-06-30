@@ -5,11 +5,28 @@ import com.online.exam.onlineexam.model.entities.Options;
 import java.util.Set;
 
 public class UserDetailsRes {
-    private String name;
+    private String firstName;
+    private String lastName;
     private String mobileNo;
     private String email;
     private Integer userId;
     private Set<Options> optionsSet;
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
     public Integer getUserId() {
         return userId;
@@ -25,14 +42,6 @@ public class UserDetailsRes {
 
     public void setOptionsSet(Set<Options> optionsSet) {
         this.optionsSet = optionsSet;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getMobileNo() {
