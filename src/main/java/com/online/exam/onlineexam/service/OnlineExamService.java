@@ -1,6 +1,7 @@
 package com.online.exam.onlineexam.service;
 
 import com.online.exam.onlineexam.exceptions.UserAlreadyExist;
+import com.online.exam.onlineexam.exceptions.UserDataException;
 import com.online.exam.onlineexam.exceptions.UserNotFoundException;
 import com.online.exam.onlineexam.model.entities.UserDetails;
 import com.online.exam.onlineexam.model.requests.UserDetailsReq;
@@ -12,11 +13,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,15 +36,13 @@ public class OnlineExamService {
 
     private UserDetailsRes mapObjectToDetails(UserDetails user) {
         UserDetailsRes detailsRes = new UserDetailsRes();
-        detailsRes.setEmail(user.getEmail());
         detailsRes.setFirstName(user.getFirstName());
         detailsRes.setLastName(user.getLastName());
-        detailsRes.setMobileNo(user.getPhoneNo());
         detailsRes.setUserId(user.getId());
         return detailsRes;
     }
 
-    public UserDetailsRes registerUserDetails(UserDetailsReq userDetailsReq) throws UserAlreadyExist {
+    public UserDetailsRes registerUserDetails(UserDetailsReq userDetailsReq) throws UserAlreadyExist, UserDataException {
         UserDetails details = examRepository.findByPhoneNo(userDetailsReq);
         if(details == null) {
             UserDetails userDetails = new UserDetails();
@@ -59,14 +56,7 @@ public class OnlineExamService {
             } catch (ParseException ignored) {
 
             }
-            if("M".equalsIgnoreCase(userDetailsReq.getGender())) {
-                userDetails.setGender("Male");
-            } else if("F".equalsIgnoreCase(userDetailsReq.getGender())) {
-                userDetails.setGender("Female");
-            } else {
-                userDetails.setGender("Other");
-            }
-            examRepository.registerUserDetails(userDetails);
+            boolean inserted = examRepository.registerUserDetails(userDetails);
         } else {
             LocalDate current = LocalDate.now();
             String previous = new SimpleDateFormat("yyyy-MM-dd").format(details.getRegisteredDate());

@@ -18,6 +18,9 @@ public class UserRowMapper implements RowMapper<UserDetails> {
         userDetails.setDob(resultSet.getDate("dob"));
         userDetails.setRegisteredDate(resultSet.getDate("registered_date"));
         userDetails.setEmail(resultSet.getString("email_id"));
+        userDetails.setAlternateMobileNo(resultSet.getString("alternate_mobile_no"));
+        userDetails.setQualification(resultSet.getString("qualification"));
+        userDetails.setSpecialization(resultSet.getString("specialization"));
         return userDetails;
     }
 }

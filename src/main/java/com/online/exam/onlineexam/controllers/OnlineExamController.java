@@ -1,6 +1,7 @@
 package com.online.exam.onlineexam.controllers;
 
 import com.online.exam.onlineexam.exceptions.UserAlreadyExist;
+import com.online.exam.onlineexam.exceptions.UserDataException;
 import com.online.exam.onlineexam.exceptions.UserNotFoundException;
 import com.online.exam.onlineexam.model.requests.UserDetailsReq;
 import com.online.exam.onlineexam.model.responses.UserDetailsRes;
@@ -21,7 +22,7 @@ public class OnlineExamController {
     }
 
     @PostMapping("/user")
-    public UserDetailsRes registerUser(@RequestBody UserDetailsReq userDetailsReq) throws UserAlreadyExist {
+    public UserDetailsRes registerUser(@RequestBody UserDetailsReq userDetailsReq) throws UserAlreadyExist, UserDataException {
         return examService.registerUserDetails(userDetailsReq);
     }
 

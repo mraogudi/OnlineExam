@@ -23,9 +23,14 @@ public class GlobalException {
     public CommonError userAlreadyFound(UserAlreadyExist e, WebRequest webRequest) {
         CommonError commonError = new CommonError();
         commonError.setErrorMessage(e.getMessage());
-        commonError.setStatusCode(HttpStatus.OK.value());
+        commonError.setStatusCode(HttpStatus.FOUND.value());
         commonError.setTime(LocalDateTime.now());
         commonError.setContextPath(webRequest.getContextPath());
         return commonError;
+    }
+
+    @ExceptionHandler(UserDataException.class)
+    public CommonError userDataError(UserDataException e, WebRequest webRequest) {
+        return new CommonError(e.getMessage(), HttpStatus.BAD_REQUEST.value(), LocalDateTime.now(), webRequest.getContextPath());
     }
 }

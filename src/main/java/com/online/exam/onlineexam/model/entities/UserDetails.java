@@ -21,6 +21,39 @@ public class UserDetails {
     private Date registeredDate;
     @Column(name = "dob")
     private Date dob;
+    @Column(name = "gender")
+    private String gender;
+    @Column(name = "qualification")
+    private String qualification;
+    @Column(name = "specialization")
+    private String specialization;
+
+    public String getSpecialization() {
+        return specialization;
+    }
+
+    public void setSpecialization(String specialization) {
+        this.specialization = specialization;
+    }
+
+    @Column(name = "alternate_mobile_no")
+    private String alternateMobileNo;
+
+    public String getQualification() {
+        return qualification;
+    }
+
+    public void setQualification(String qualification) {
+        this.qualification = qualification;
+    }
+
+    public String getAlternateMobileNo() {
+        return alternateMobileNo;
+    }
+
+    public void setAlternateMobileNo(String alternateMobileNo) {
+        this.alternateMobileNo = alternateMobileNo;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -85,8 +118,5 @@ public class UserDetails {
     public void setGender(String gender) {
         this.gender = gender;
     }
-
-    @Column(name = "gender")
-    private String gender;
 
 }

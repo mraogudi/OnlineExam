@@ -3,10 +3,20 @@ package com.online.exam.onlineexam.exceptions;
 import java.time.LocalDateTime;
 
 public class CommonError {
+    public CommonError() {
+    }
+
     private String errorMessage;
     private int statusCode;
     private LocalDateTime time;
     private String contextPath;
+
+    public CommonError(String errorMessage, int statusCode, LocalDateTime time, String contextPath) {
+        this.errorMessage = errorMessage;
+        this.statusCode = statusCode;
+        this.time = time;
+        this.contextPath = contextPath;
+    }
 
     public String getContextPath() {
         return contextPath;

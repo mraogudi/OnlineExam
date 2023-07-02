@@ -1,10 +1,10 @@
 package com.online.exam.onlineexam.repository;
 
+import com.online.exam.onlineexam.exceptions.UserDataException;
 import com.online.exam.onlineexam.mappers.UserRowMapper;
 import com.online.exam.onlineexam.model.entities.UserDetails;
 import com.online.exam.onlineexam.model.requests.UserDetailsReq;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.stereotype.Repository;
@@ -17,19 +17,28 @@ public class OnlineExamRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public Boolean registerUserDetails(UserDetails userDetails) {
-        String insertSql = "insert into tbl_user_details (first_name, last_name, dob, gender, email_id, mobile_no, registered_date)" +
-                " values (?, ?, ?, ?, ?, ?, ?)";
-        boolean inserted = Boolean.TRUE.equals(jdbcTemplate.execute(insertSql, (PreparedStatementCallback<Boolean>) ps -> {
-            ps.setString(1, userDetails.getFirstName());
-            ps.setString(2, userDetails.getLastName());
-            ps.setDate(3, new Date(userDetails.getDob().getTime()));
-            ps.setString(4, userDetails.getGender());
-            ps.setString(5, userDetails.getEmail());
-            ps.setString(6, userDetails.getPhoneNo());
-            ps.setDate(7, new Date(new java.util.Date().getTime()));
-            return ps.execute();
-        }));
+    public Boolean registerUserDetails(UserDetails userDetails) throws UserDataException {
+        boolean inserted = false;
+                String insertSql = "insert into tbl_user_details (first_name, last_name, dob, gender, email_id, mobile_no, registered_date," +
+                " qualification, specialization, alternate_mobile_no)" +
+                " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try {
+            inserted = Boolean.TRUE.equals(jdbcTemplate.execute(insertSql, (PreparedStatementCallback<Boolean>) ps -> {
+                ps.setString(1, userDetails.getFirstName());
+                ps.setString(2, userDetails.getLastName());
+                ps.setDate(3, new Date(userDetails.getDob().getTime()));
+                ps.setString(4, userDetails.getGender());
+                ps.setString(5, userDetails.getEmail());
+                ps.setString(6, userDetails.getPhoneNo());
+                ps.setDate(7, new Date(new java.util.Date().getTime()));
+                ps.setString(8, userDetails.getQualification());
+                ps.setString(9, userDetails.getSpecialization());
+                ps.setString(10, userDetails.getAlternateMobileNo());
+                return ps.execute();
+            }));
+        } catch (Exception e) {
+            throw new UserDataException();
+        }
         return inserted;
     }
 
