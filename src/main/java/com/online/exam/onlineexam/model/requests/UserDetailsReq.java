@@ -8,15 +8,23 @@ public class UserDetailsReq {
     private String dob;
     private String gender;
     private String qualification;
-    private String specification;
-    private String alternateMobileNo;
+    private String specialization;
+    private String altMobileNo;
 
-    public String getAlternateMobileNo() {
-        return alternateMobileNo;
+    public String getSpecialization() {
+        return specialization;
     }
 
-    public void setAlternateMobileNo(String alternateMobileNo) {
-        this.alternateMobileNo = alternateMobileNo;
+    public void setSpecialization(String specialization) {
+        this.specialization = specialization;
+    }
+
+    public String getAltMobileNo() {
+        return altMobileNo;
+    }
+
+    public void setAltMobileNo(String altMobileNo) {
+        this.altMobileNo = altMobileNo;
     }
 
     public String getQualification() {
@@ -25,14 +33,6 @@ public class UserDetailsReq {
 
     public void setQualification(String qualification) {
         this.qualification = qualification;
-    }
-
-    public String getSpecification() {
-        return specification;
-    }
-
-    public void setSpecification(String specification) {
-        this.specification = specification;
     }
 
     public String getLastName() {

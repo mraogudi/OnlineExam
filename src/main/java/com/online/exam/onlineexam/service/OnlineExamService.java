@@ -31,25 +31,22 @@ public class OnlineExamService {
         if (userDetailsList.isEmpty()) {
             throw new UserNotFoundException("No users registered till date");
         }
-        return userDetailsList.stream().map(this::mapObjectToDetails).collect(Collectors.toList());
-    }
-
-    private UserDetailsRes mapObjectToDetails(UserDetails user) {
-        UserDetailsRes detailsRes = new UserDetailsRes();
-        detailsRes.setFirstName(user.getFirstName());
-        detailsRes.setLastName(user.getLastName());
-        detailsRes.setUserId(user.getId());
-        return detailsRes;
+        return userDetailsList.stream().map(this::convertEntityToRes).collect(Collectors.toList());
     }
 
     public UserDetailsRes registerUserDetails(UserDetailsReq userDetailsReq) throws UserAlreadyExist, UserDataException {
         UserDetails details = examRepository.findByPhoneNo(userDetailsReq);
+        UserDetailsRes returnObj;
         if(details == null) {
             UserDetails userDetails = new UserDetails();
             userDetails.setEmail(userDetailsReq.getEmail());
             userDetails.setFirstName(userDetailsReq.getFirstName());
             userDetails.setLastName(userDetailsReq.getLastName());
             userDetails.setPhoneNo(userDetailsReq.getMobileNo());
+            userDetails.setAlternateMobileNo(userDetailsReq.getAltMobileNo());
+            userDetails.setSpecialization(userDetailsReq.getSpecialization());
+            userDetails.setQualification(userDetailsReq.getQualification());
+            userDetails.setGender(userDetailsReq.getGender());
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             try {
                 userDetails.setDob(dateFormat.parse(userDetailsReq.getDob()));
@@ -57,6 +54,7 @@ public class OnlineExamService {
 
             }
             boolean inserted = examRepository.registerUserDetails(userDetails);
+            returnObj = convertEntityToRes(examRepository.findByPhoneNo(userDetailsReq));
         } else {
             LocalDate current = LocalDate.now();
             String previous = new SimpleDateFormat("yyyy-MM-dd").format(details.getRegisteredDate());
@@ -66,11 +64,22 @@ public class OnlineExamService {
             long days = ChronoUnit.DAYS.between(registeredDate, current);
             if (days > 30) {
                 details.setRegisteredDate(new Date());
-                examRepository.registerUserDetails(details);
+                boolean inserted = examRepository.registerUserDetails(details);
+                returnObj = convertEntityToRes(examRepository.getById(details.getId()));
             } else {
                 throw new UserAlreadyExist("User Already exist");
             }
         }
-        return null;
+        return returnObj;
+    }
+
+    private UserDetailsRes convertEntityToRes(UserDetails details1) {
+        UserDetailsRes detailsRes = new UserDetailsRes();
+        detailsRes.setLastName(details1.getLastName());
+        detailsRes.setFirstName(details1.getFirstName());
+        detailsRes.setEmail(details1.getEmail());
+        detailsRes.setMobileNo(details1.getPhoneNo());
+        detailsRes.setUserId(details1.getId());
+        return detailsRes;
     }
 }

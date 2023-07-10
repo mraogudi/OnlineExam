@@ -48,7 +48,7 @@ public class OnlineExamRepository {
                 " and email_id = '"+userDetailsReq.getEmail()+"' and dob = '"+userDetailsReq.getDob()+"'" +
                 " or (first_name = '"+userDetailsReq.getFirstName()+"' or last_name = '"+userDetailsReq.getLastName()+"'" +
                 " or first_name = '"+userDetailsReq.getLastName()+"' or last_name = '"+userDetailsReq.getFirstName()+"')";
-        System.out.println("Select Query :: "+selectQuery);
+
         List<UserDetails> userDetailsList = jdbcTemplate.query(selectQuery, new UserRowMapper());
         if(!userDetailsList.isEmpty()) {
             return userDetailsList.get(0);
@@ -60,5 +60,10 @@ public class OnlineExamRepository {
     public List<UserDetails> getAllUsers() {
         String selectAll = "select * from tbl_user_details";
         return jdbcTemplate.queryForList(selectAll, UserDetails.class);
+    }
+
+    public UserDetails getById(Integer id) {
+        String selectQuery = "select * from tbl_user_details where id = ?";
+        return jdbcTemplate.queryForObject(selectQuery, new Object[]{id}, new UserRowMapper());
     }
 }

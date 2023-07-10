@@ -6,14 +6,23 @@ public class UserDetailsRes {
     private String firstName;
     private String lastName;
     private Integer userId;
-    private List<QuestionRes> questionsList;
+    private String mobileNo;
+    private String email;
 
-    public List<QuestionRes> getQuestionsList() {
-        return questionsList;
+    public String getMobileNo() {
+        return mobileNo;
     }
 
-    public void setQuestionsList(List<QuestionRes> questionsList) {
-        this.questionsList = questionsList;
+    public void setMobileNo(String mobileNo) {
+        this.mobileNo = mobileNo;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getFirstName() {
